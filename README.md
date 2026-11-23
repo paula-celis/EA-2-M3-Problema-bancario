@@ -1,6 +1,6 @@
 # Simulación de un problema bancario
 
-Proyecto de simulación de colas de atención bancaria para comparar cuatro configuraciones de cajeros. El modelo usa llegadas y tiempos de servicio exponenciales, una jornada de 480 minutos y una proporción de 70 % de retiros y 30 % de pagos.
+Proyecto de simulación de colas de atención bancaria para comparar cuatro configuraciones de cajeros automáticos. El modelo usa llegadas y tiempos de servicio exponenciales, una jornada de 480 minutos y una proporción de 70 % de retiros y 30 % de pagos.
 
 ## Escenarios
 
