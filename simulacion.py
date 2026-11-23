@@ -24,9 +24,11 @@ SCENARIOS = {
  '4 cajas (2 retiros + 2 pagos)': ['Retiro','Retiro','Pago','Pago'],
 }
 
+# Genera un intervalo entre llegadas o un tiempo de servicio exponencial.
 def draw_exp(mean, rng):
     return rng.expovariate(1.0 / mean)
 
+# Elige primero retiro o pago y luego el tipo con su probabilidad condicional.
 def sample_customer(rng):
     action = 'Retiro' if rng.random() < .70 else 'Pago'
     choices = [(typ, *vals) for (act,typ), vals in DATA.items() if act == action]
@@ -38,21 +40,25 @@ def sample_customer(rng):
     typ, prob, mean_arrival, mean_service = choices[-1]
     return action, typ, mean_arrival, mean_service
 
+# Simula una jornada con la semilla asignada a esta replica.
 def run_rep(seed, teller_types):
     rng = random.Random(seed)
     available_at = [0.0] * len(teller_types)
     time = 0.0; observations=[]; counts=defaultdict(int)
+    # Genera clientes hasta que la siguiente llegada quede fuera de la jornada.
     while True:
         action, typ, mean_arrival, mean_service = sample_customer(rng)
         time += draw_exp(mean_arrival, rng)
         if time >= HORIZON:
             break
+        # Solo cajas compatibles pueden atender; se elige la que este libre primero.
         eligible = [i for i, kind in enumerate(teller_types)
                     if kind == 'Mixta' or kind == action]
         # La caja que primero queda libre recibe al usuario, con recorrido cero.
         idx = min(eligible, key=lambda i: available_at[i])
         start = max(time, available_at[idx])
         wait = start - time
+        # La espera termina cuando comienza el servicio; el servicio se suma luego.
         service = draw_exp(mean_service, rng)
         available_at[idx] = start + service
         observations.append((action, typ, idx + 1, wait, service))
@@ -64,9 +70,11 @@ def run_rep(seed, teller_types):
     teller_means={i:statistics.mean(v) for i,v in teller_service.items()}
     return counts, waits, teller_means, len(observations)
 
+# Ejecuta las replicas de cada escenario y exporta los resultados para analizarlos.
 def main():
     out=Path(__file__).resolve().parents[1]/'outputs'; out.mkdir(exist_ok=True)
     result_rows=[]; teller_rows=[]
+    # Cambia la semilla entre escenarios y replicas para conservar reproducibilidad.
     for scenario_index,(scenario,teller_types) in enumerate(SCENARIOS.items()):
         for rep in range(1,N+1):
             counts, waits, teller_means, total = run_rep(SEED+scenario_index*100000+rep,teller_types)
