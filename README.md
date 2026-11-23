@@ -1,6 +1,6 @@
 # Simulación de un problema bancario
 
-Proyecto de simulación de colas de atención bancaria para comparar cuatro configuraciones de cajeros. El código usa llegadas y tiempos de servicio exponenciales, una jornada de 480 minutos y una proporción de 70 % retiros / 30 % pagos.
+Proyecto de simulación de colas de atención bancaria para comparar cuatro configuraciones de cajeros. El modelo usa llegadas y tiempos de servicio exponenciales, una jornada de 480 minutos y una proporción de 70 % de retiros y 30 % de pagos.
 
 ## Escenarios
 
@@ -19,9 +19,9 @@ Python 3. No requiere instalar paquetes externos.
 python simulacion.py 20 20261121
 ```
 
-Los dos argumentos son la cantidad de réplicas por escenario y la semilla aleatoria. Si se omiten, el programa usa 20 réplicas y la semilla 20261121.
+Los argumentos indican la cantidad de réplicas por escenario y la semilla aleatoria. Si se omiten, el programa usa 20 réplicas y la semilla 20261121.
 
-El programa genera `resultados_replicas.csv` y `tiempos_cajero.csv` en la carpeta `outputs` ubicada junto a la carpeta del proyecto. Los CSV incluidos en este repositorio corresponden a 20 réplicas por escenario.
+El programa guarda `resultados_replicas.csv` y `tiempos_cajero.csv` en la carpeta `outputs`, ubicada junto a la carpeta del proyecto. Los CSV incluidos en este repositorio corresponden a 20 réplicas por escenario.
 
 ## Archivos
 
